@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			/*
+			 jQuery :
+				JavaScript的类库，http://www.jquery.com/
+			
+			作用：将一些复杂但是复用率高的逻辑，封装起来，直接调用,大大减少了代码量
+				对于低版本浏览器的兼容是处理过的，无须担心因为兼容问题程序挂了的
+				支持运动。特别是在操作DOM，ajax中有着优先、杰出的表现
+			
+			特点：吃的少干的多。
+			关于版本：
+				一种是1.x的版本   1.72  兼容低版本浏览器（学习版，生产版.min.js）
+				另一种为3.x  不兼容低版本，不过使用了一些HTML5的东西（学习版，开发版）
+			基本语法：
+				1.选择器：
+					$('#div') id选择器
+					$('.li') class选择器
+					$('input[type="button"]')  属性选择器
+					
+					$('li[class*="li"]') 属性通配选择器
+					$('li[class^="li"]') 属性开头选择器
+					$('li[class$="li"]') 属性结尾选择器
+					$('li[class!="li"]') 属性排除选择器
+					$('li:odd') 奇数选择器 （从0开始计数）->指向偶数
+					$('li:even') 偶数选择器 （从0开始计数）->指向奇数
+					$('li:gt(3)') 大于选择器
+					$('li:lt(3)') 小于选择器
+					$('li:eq(3)') 下标选择器
+				注：不推荐直接通过关系去选择元素，性能差。和css选择器一样，要先找到页面上所有的i在查找它的归属，性能差
+				例：$('#ul i')----->推荐const ul = $('ul'); ul.find('i').text('234')
+			 	
+			 	2.属性操作：
+			 		val()  =  value
+					html()  = innerHTML
+					text() = innerText
+					addClass('xxx') => className = 'xxx' 
+					removeClass('xxx') => 删除指定的class名
+					console.log(attr('index'))  -> getAttribute('index')
+					attr('index','1')  -> setAttribute('index','1');->自定义属性
+					attr('key值'，value值)
+					注意：
+						操作表单元素属性：checked，disabled ，统一使用**prop**
+				3.each->for循环
+					专门给非jQ对象使用的
+					$().each(function(i,e){//跟forEach参数对调
+							e是原生对象
+						})
+					index(); //当前元素相对于兄弟元素的索引
+					尽量在写index()的时候，把范围传入到index()方法中。
+					例：
+						index(':button') ; 从button中当前触发的元素索引为几
+				4.DOM
+					上一个：prev()
+					下一个：next()
+					子级：children(支持搜索范围的)
+					父级：parent()
+					兄弟级：siblings()
+					第一个：first()
+					最后一个：last()
+					closest('范围'):逐级向上级(父级)元素匹配，并返回最先**匹配(范围)**的元素，包括其本身
+					find(必传搜索范围)：知道某个元素下的所有子元素
+					find()和children()的区别：
+						1.children只能找一层
+						2.find可以找多层
+					创建：
+						$('<li>') ->无内容
+						$('<li></li>') ->有内容
+						同样可以用模板字符串``
+					插入：
+						append() ->	在父级元素末尾插入
+						语法：父元素.append()
+						appendTo(target) -	将匹配的元素插入到目标元素的最后面	
+						语法：要插入的元素.appendTo
+						prepend() -> 放在某个元素的第一位
+						语法：目标元素.prepend(要出入的内容)
+					删除：
+						remove()
+						语法：元素.remove() ->将某个特定元素删除
+							元素.remove('指定项') ->在特定元素下删除指定项
+						
+						
+				5.BOM:
+					历史记录的管理 history
+					hash
+					window.location.href
+					search
+					navigator.userAgent
+					浏览器的尺寸
+					滚动距离
+					height/width->不包括border和padding，就是元素本身设置的高度
+					
+					innerHeight/innerWidth,支持padding不支持border
+						设置后：设置的值=height+padding
+						
+					outerHeight/outerWidth,支持padding+border和可选margin(仅限获取时):
+						设置后：设置的值=height+padding+border
+						
+					offset().left/offset().top:绝对位置(当前元素到页面顶部的位置)
+					
+					position().left/position().top:当前元素外边框到父级的内边框的距离
+					
+					scrollTop/scrollLeft:滚动距离
+					
+				6.jQ与原生的转换：
+					原生转jQ:$(原生对象)
+					jQ转原生：$(jQ对象)[下标] ->推荐使用
+							$(jQ对象).get(下标)
+				
+						
+				7.动画
+					1.在hide或者show中设置时间之后，会有运动效果,改变宽、高 、透明度
+						slow（慢），normal（中等），fast（快）
+					2.animate:
+						注：Q中的运动是走队列的。只要使用jQ中的运动，那么就要加stop()
+					语法：animate( properties [, duration ] [, easing ] [, complete ] )
+						参数：properties：一个css属性和值的**对象**，运动都是根据这组对象走的
+							[duration ]：可选->动画运行的时间
+							[easing]：过渡用哪种函数：linear/swing
+							[complete]:回调函数，动画运动完要执行的效果
+				8.事件
+					jQ中所有的事件方法全是addEventListener事件绑定的，并且所有的事件方法都是由on()来扩展出来的。
+					
+					注：在使用JQ中，碰到事件套事件，那么就会出现，多次触发父级事件的时候
+						再触发一次子级事件，这个时候子级事件触发的频率跟父级触发是一样的。
+		
+					解决：使用off在子级事件函数前解绑。
+					
+					****阻止冒泡与阻止默认行为都是return false;
+					！！！
+					事件监听 , 只要问到JQ几乎必考.
+						1.事件必须绑定在父级身上
+						2.当触发某个事件的时候，通过事件冒泡，使得父级可以从ev.target中监听到当前触发的元素是否为想要的子级
+						3.如果是就执行事件处理函数。
+			*/
+		</script>
+	</body>
+</html>
